@@ -62,16 +62,43 @@ const UserForm = ({ user, onSave, onCancel }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Filter input to only allow valid name characters
+  const filterNameInput = (value) => {
+    // Only allow letters, spaces, hyphens, and apostrophes
+    return value.replace(/[^a-zA-Z\s\-']/g, '');
+  };
+
+  // Handle paste events to filter pasted content
+  const handlePaste = (e) => {
+    const { name } = e.target;
+    if (name === 'firstName' || name === 'lastName') {
+      e.preventDefault();
+      const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+      const filteredText = filterNameInput(pastedText);
+      setFormData(prev => ({
+        ...prev,
+        [name]: filteredText
+      }));
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Filter input for name fields to prevent invalid characters
+    let filteredValue = value;
+    if (name === 'firstName' || name === 'lastName') {
+      filteredValue = filterNameInput(value);
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: filteredValue
     }));
     
     // Real-time validation for names
     if (name === 'firstName' || name === 'lastName') {
-      if (value && !/^[a-zA-Z\s\-']*$/.test(value)) {
+      if (filteredValue && !/^[a-zA-Z\s\-']*$/.test(filteredValue)) {
         setErrors(prev => ({
           ...prev,
           [name]: `${name === 'firstName' ? 'First' : 'Last'} name can only contain letters, spaces, hyphens, and apostrophes`
@@ -126,6 +153,7 @@ const UserForm = ({ user, onSave, onCancel }) => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
+                  onPaste={handlePaste}
                   isInvalid={!!errors.firstName}
                   placeholder="Enter first name (letters only)"
                 />
@@ -142,6 +170,7 @@ const UserForm = ({ user, onSave, onCancel }) => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
+                  onPaste={handlePaste}
                   isInvalid={!!errors.lastName}
                   placeholder="Enter last name (letters only)"
                 />

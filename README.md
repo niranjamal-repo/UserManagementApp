@@ -14,6 +14,8 @@ A full-stack web application for managing users with a React frontend and .NET C
 
 - ✅ Create, Read, Update, Delete (CRUD) operations for users
 - ✅ User fields: First Name, Last Name, Mobile, Email, Address
+- ✅ **Input validation and filtering** for names (letters, spaces, hyphens, apostrophes only)
+- ✅ Real-time form validation with user-friendly error messages
 - ✅ Responsive Bootstrap UI
 - ✅ RESTful API endpoints
 - ✅ Entity Framework Core with SQL Server
@@ -67,6 +69,55 @@ A full-stack web application for managing users with a React frontend and .NET C
 ### API Documentation
 
 Once the backend is running, visit `https://localhost:7000/swagger` for interactive API documentation.
+
+## ✅ Data Validation
+
+### Name Field Validation
+
+The application enforces strict validation for First Name and Last Name fields:
+
+#### ✅ **Allowed Characters**
+- Letters (a-z, A-Z)
+- Spaces (for compound names like "Mary Jane")
+- Hyphens (for names like "Anne-Marie")
+- Apostrophes (for names like "O'Connor")
+
+#### ❌ **Blocked Characters**
+- Numbers (0-9)
+- Special symbols (@, #, $, %, etc.)
+- Punctuation marks (., !, ?, etc.)
+
+#### 🔧 **Validation Features**
+
+**Frontend (React):**
+- **Real-time input filtering**: Invalid characters are automatically removed as you type
+- **Paste protection**: Pasted content is filtered to remove invalid characters
+- **Instant validation feedback**: Error messages appear immediately
+- **User-friendly placeholders**: Clear guidance on allowed characters
+
+**Backend (.NET Core):**
+- **Server-side validation**: Regular expression validation using `[RegularExpression]` attributes
+- **API-level protection**: Invalid data is rejected before reaching the database
+- **Detailed error messages**: Clear feedback about validation failures
+
+#### 📝 **Validation Examples**
+
+**Valid Names:**
+```
+John
+Mary Jane
+Anne-Marie
+O'Connor
+José
+Jean-Pierre
+```
+
+**Invalid Names (automatically filtered/blocked):**
+```
+John123     ❌ Numbers removed
+Mary@Jane   ❌ Special characters removed
+John.Smith  ❌ Punctuation removed
+```
 
 ## ☁️ Azure Deployment
 
@@ -198,8 +249,11 @@ npm test
 - The application uses Entity Framework Core Code First approach
 - Database migrations are automatically applied on startup
 - Email field has a unique constraint
+- **Name fields have strict validation**: Only letters, spaces, hyphens, and apostrophes allowed
+- **Real-time input filtering**: Invalid characters are automatically removed as users type
 - All timestamps are in UTC
 - Bootstrap 5 is used for responsive UI components
+- **Dual validation**: Both frontend (React) and backend (.NET) validation for data integrity
 
 ## 🤝 Contributing
 
