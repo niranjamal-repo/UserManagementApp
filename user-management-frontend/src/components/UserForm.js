@@ -27,24 +27,33 @@ const UserForm = ({ user, onSave, onCancel }) => {
   const validateForm = () => {
     const newErrors = {};
 
+    // First Name validation
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
+    } else if (!/^[a-zA-Z\s\-']+$/.test(formData.firstName)) {
+      newErrors.firstName = 'First name can only contain letters, spaces, hyphens, and apostrophes';
     }
 
+    // Last Name validation
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
+    } else if (!/^[a-zA-Z\s\-']+$/.test(formData.lastName)) {
+      newErrors.lastName = 'Last name can only contain letters, spaces, hyphens, and apostrophes';
     }
 
+    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
 
+    // Mobile validation
     if (!formData.mobile.trim()) {
       newErrors.mobile = 'Mobile number is required';
     }
 
+    // Address validation
     if (!formData.address.trim()) {
       newErrors.address = 'Address is required';
     }
@@ -60,12 +69,27 @@ const UserForm = ({ user, onSave, onCancel }) => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+    // Real-time validation for names
+    if (name === 'firstName' || name === 'lastName') {
+      if (value && !/^[a-zA-Z\s\-']*$/.test(value)) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: `${name === 'firstName' ? 'First' : 'Last'} name can only contain letters, spaces, hyphens, and apostrophes`
+        }));
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          [name]: ''
+        }));
+      }
+    } else {
+      // Clear error for other fields when user starts typing
+      if (errors[name]) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: ''
+        }));
+      }
     }
   };
 
@@ -103,6 +127,7 @@ const UserForm = ({ user, onSave, onCancel }) => {
                   value={formData.firstName}
                   onChange={handleChange}
                   isInvalid={!!errors.firstName}
+                  placeholder="Enter first name (letters only)"
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.firstName}
@@ -118,6 +143,7 @@ const UserForm = ({ user, onSave, onCancel }) => {
                   value={formData.lastName}
                   onChange={handleChange}
                   isInvalid={!!errors.lastName}
+                  placeholder="Enter last name (letters only)"
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.lastName}

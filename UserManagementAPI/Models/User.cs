@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace UserManagementAPI.Models
 {
@@ -8,10 +9,12 @@ namespace UserManagementAPI.Models
 
         [Required]
         [StringLength(50)]
+        [RegularExpression(@"^[a-zA-Z\s\-']+$", ErrorMessage = "First name can only contain letters, spaces, hyphens, and apostrophes.")]
         public string FirstName { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
+        [RegularExpression(@"^[a-zA-Z\s\-']+$", ErrorMessage = "Last name can only contain letters, spaces, hyphens, and apostrophes.")]
         public string LastName { get; set; } = string.Empty;
 
         [Required]
