@@ -7,11 +7,11 @@ namespace UserManagementAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersControllerEF : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersControllerEF(ApplicationDbContext context)
         {
             _context = context;
         }
