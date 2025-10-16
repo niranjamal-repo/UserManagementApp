@@ -42,14 +42,28 @@ jobs:
       run: dotnet publish UserManagementAPI/UserManagementAPI.csproj --configuration Release --output ./publish
     
     - name: Install Frontend Dependencies
+      working-directory: user-management-frontend
       run: |
-        cd user-management-frontend
+        echo "Installing frontend dependencies..."
         npm ci
+        echo "Dependencies installed successfully"
+    
+    - name: Verify Frontend Structure
+      working-directory: user-management-frontend
+      run: |
+        echo "Checking frontend structure..."
+        ls -la
+        echo "Checking public directory..."
+        ls -la public/
+        echo "Checking if index.html exists..."
+        test -f public/index.html && echo "index.html found" || echo "index.html NOT found"
     
     - name: Build Frontend
+      working-directory: user-management-frontend
       run: |
-        cd user-management-frontend
+        echo "Building frontend..."
         npm run build
+        echo "Frontend build completed"
     
     - name: Upload Backend Artifacts
       uses: actions/upload-artifact@v4
