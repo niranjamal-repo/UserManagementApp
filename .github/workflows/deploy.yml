@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  AZURE_WEBAPP_NAME: your-actual-app-name
+  AZURE_WEBAPP_NAME: user-management-api-1760578071
   AZURE_RESOURCE_GROUP: user-management-rg
   DOTNET_VERSION: '8.0.x'
 
