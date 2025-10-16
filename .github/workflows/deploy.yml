@@ -8,8 +8,10 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: user-management-api-1760578071
+  AZURE_FRONTEND_NAME: user-management-frontend-1760578071
   AZURE_RESOURCE_GROUP: user-management-rg
   DOTNET_VERSION: '8.0.x'
+  NODE_VERSION: '18.x'
 
 jobs:
   build-and-test:
@@ -23,6 +25,13 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: user-management-frontend/package-lock.json
+    
     - name: Restore dependencies
       run: dotnet restore UserManagementAPI/UserManagementAPI.csproj
     
@@ -32,11 +41,27 @@ jobs:
     - name: Publish
       run: dotnet publish UserManagementAPI/UserManagementAPI.csproj --configuration Release --output ./publish
     
-    - name: Upload build artifacts
+    - name: Install Frontend Dependencies
+      run: |
+        cd user-management-frontend
+        npm ci
+    
+    - name: Build Frontend
+      run: |
+        cd user-management-frontend
+        npm run build
+    
+    - name: Upload Backend Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: .net-app
         path: ./publish
+    
+    - name: Upload Frontend Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build
+        path: user-management-frontend/build
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,19 +69,31 @@ jobs:
     if: github.ref == 'refs/heads/main'
     
     steps:
-    - name: Download build artifacts
+    - name: Download Backend Artifacts
       uses: actions/download-artifact@v4
       with:
         name: .net-app
         path: ./publish
+    
+    - name: Download Frontend Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-build
+        path: ./frontend-build
     
     - name: Login to Azure (JSON Creds)
       uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Deploy to Azure Web App
+    - name: Deploy Backend to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ./publish
+    
+    - name: Deploy Frontend to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.AZURE_FRONTEND_NAME }}
+        package: ./frontend-build
