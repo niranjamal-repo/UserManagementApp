@@ -19,6 +19,17 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Verify Checkout
+      run: |
+        echo "Verifying checkout..."
+        ls -la
+        echo "Git status:"
+        git status
+        echo "Git log (last 3 commits):"
+        git log --oneline -3
     
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -40,6 +51,17 @@ jobs:
     
     - name: Publish
       run: dotnet publish UserManagementAPI/UserManagementAPI.csproj --configuration Release --output ./publish
+    
+    - name: Verify Repository Structure
+      run: |
+        echo "Checking repository structure..."
+        ls -la
+        echo "Checking if frontend directory exists..."
+        test -d user-management-frontend && echo "Frontend directory found" || echo "Frontend directory NOT found"
+        if [ -d "user-management-frontend" ]; then
+          echo "Frontend directory contents:"
+          ls -la user-management-frontend/
+        fi
     
     - name: Install Frontend Dependencies
       working-directory: user-management-frontend
