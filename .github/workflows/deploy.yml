@@ -53,11 +53,11 @@ jobs:
     - name: Login to Azure  
       uses: azure/login@v2
       with:
-          auth-type: service_principal
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    # Optionally, if you have multiple subscriptions and need to specify one:
+    # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    # Or if you don't have a subscription associated with the service principal:
+    # allow-no-subscriptions: true
     
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
