@@ -468,6 +468,9 @@ public
 # React frontend public directory (exception)
 !user-management-frontend/public/
 
+# React frontend environment files (exceptions)
+!user-management-frontend/.env.production
+
 # Storybook build outputs
 .out
 .storybook-out

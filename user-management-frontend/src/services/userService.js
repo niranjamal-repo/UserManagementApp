@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:7000/api/users';
+const API_URL = process.env.REACT_APP_API_URL || 'https://user-management-api-1760578071.azurewebsites.net/api/users';
 
 const api = axios.create({
   baseURL: API_URL,

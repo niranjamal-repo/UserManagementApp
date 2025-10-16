@@ -84,6 +84,7 @@ jobs:
       working-directory: user-management-frontend
       run: |
         echo "Building frontend..."
+        echo "API URL: $REACT_APP_API_URL"
         npm run build
         echo "Frontend build completed"
     
