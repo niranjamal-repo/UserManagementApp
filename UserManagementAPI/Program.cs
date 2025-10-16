@@ -8,6 +8,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:3000",
+                "https://user-management-frontend-1760578071-hzagenasecfxcnew.centralus-01.azurewebsites.net",
+                "https://user-management-frontend-1760578071.azurewebsites.net"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // Temporarily comment out Entity Framework to test basic functionality
 // builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -25,8 +40,8 @@ app.UseSwaggerUI(c =>
 // Remove HTTPS redirection temporarily
 // app.UseHttpsRedirection();
 
-// Remove CORS temporarily
-// app.UseCors("AllowReactApp");
+// Enable CORS
+app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 app.MapControllers();
