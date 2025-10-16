@@ -130,7 +130,7 @@ John.Smith  ❌ Punctuation removed
 
 2. **Run the deployment script**
    ```powershell
-   .\azure-deploy.ps1 -ResourceGroupName "user-management-rg" -AppServiceName "user-management-api" -SqlServerName "user-management-sql" -DatabaseName "UserManagementDB" -Location "East US"
+   .\azure-deploy.ps1 -ResourceGroupName "user-management-rg" -AppServiceName "user-management-api" -SqlServerName "user-management-sql" -DatabaseName "UserManagementDB" -Location "Australia Southeast"
    ```
 
 ### Option 2: Manual Azure Setup

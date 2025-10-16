@@ -19,6 +19,7 @@ namespace UserManagementAPI.Models
 
         [Required]
         [StringLength(15)]
+        [RegularExpression(@"^[\+]?[1-9][\d]{0,15}$", ErrorMessage = "Please enter a valid mobile number.")]
         public string Mobile { get; set; } = string.Empty;
 
         [Required]

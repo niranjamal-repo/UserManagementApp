@@ -41,6 +41,17 @@ namespace UserManagementAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Check if email already exists
+            if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+            {
+                return BadRequest("Email already exists");
+            }
+
             user.CreatedAt = DateTime.UtcNow;
             user.UpdatedAt = DateTime.UtcNow;
 
@@ -59,9 +70,30 @@ namespace UserManagementAPI.Controllers
                 return BadRequest();
             }
 
-            user.UpdatedAt = DateTime.UtcNow;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            _context.Entry(user).State = EntityState.Modified;
+            // Check if email already exists for another user
+            if (await _context.Users.AnyAsync(u => u.Email == user.Email && u.Id != id))
+            {
+                return BadRequest("Email already exists");
+            }
+
+            var existingUser = await _context.Users.FindAsync(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            // Update only the fields that should be updated
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+            existingUser.Mobile = user.Mobile;
+            existingUser.Address = user.Address;
+            existingUser.UpdatedAt = DateTime.UtcNow;
 
             try
             {

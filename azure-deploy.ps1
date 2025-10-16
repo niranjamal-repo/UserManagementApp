@@ -15,7 +15,7 @@ param(
     [string]$DatabaseName,
     
     [Parameter(Mandatory=$true)]
-    [string]$Location = "East US"
+    [string]$Location = "Australia Southeast"
 )
 
 Write-Host "Starting Azure deployment..." -ForegroundColor Green

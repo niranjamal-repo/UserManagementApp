@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 
 const UserForm = ({ user, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -51,6 +51,8 @@ const UserForm = ({ user, onSave, onCancel }) => {
     // Mobile validation
     if (!formData.mobile.trim()) {
       newErrors.mobile = 'Mobile number is required';
+    } else if (!/^[+]?[1-9][\d]{0,15}$/.test(formData.mobile.replace(/\s/g, ''))) {
+      newErrors.mobile = 'Please enter a valid mobile number';
     }
 
     // Address validation
