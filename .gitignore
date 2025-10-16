@@ -465,6 +465,9 @@ dist
 .cache/
 public
 
+# React frontend public directory (exception)
+!user-management-frontend/public/
+
 # Storybook build outputs
 .out
 .storybook-out
