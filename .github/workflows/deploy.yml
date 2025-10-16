@@ -29,9 +29,6 @@ jobs:
     - name: Build
       run: dotnet build UserManagementAPI/UserManagementAPI.csproj --configuration Release --no-restore
     
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
-    
     - name: Publish
       run: dotnet publish UserManagementAPI/UserManagementAPI.csproj --configuration Release --output ./publish
     

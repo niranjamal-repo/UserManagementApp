@@ -51,8 +51,8 @@ const UserForm = ({ user, onSave, onCancel }) => {
     // Mobile validation
     if (!formData.mobile.trim()) {
       newErrors.mobile = 'Mobile number is required';
-    } else if (!/^[+]?[1-9][\d]{0,15}$/.test(formData.mobile.replace(/\s/g, ''))) {
-      newErrors.mobile = 'Please enter a valid mobile number';
+    } else if (!/^[0-9]{1,12}$/.test(formData.mobile)) {
+      newErrors.mobile = 'Mobile number must contain only numeric values and be maximum 12 characters';
     }
 
     // Address validation
@@ -70,6 +70,12 @@ const UserForm = ({ user, onSave, onCancel }) => {
     return value.replace(/[^a-zA-Z\s\-']/g, '');
   };
 
+  // Filter input to only allow numeric characters for mobile
+  const filterMobileInput = (value) => {
+    // Only allow numbers and limit to 12 characters
+    return value.replace(/[^0-9]/g, '').slice(0, 12);
+  };
+
   // Handle paste events to filter pasted content
   const handlePaste = (e) => {
     const { name } = e.target;
@@ -81,16 +87,26 @@ const UserForm = ({ user, onSave, onCancel }) => {
         ...prev,
         [name]: filteredText
       }));
+    } else if (name === 'mobile') {
+      e.preventDefault();
+      const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+      const filteredText = filterMobileInput(pastedText);
+      setFormData(prev => ({
+        ...prev,
+        [name]: filteredText
+      }));
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Filter input for name fields to prevent invalid characters
+    // Filter input for specific fields to prevent invalid characters
     let filteredValue = value;
     if (name === 'firstName' || name === 'lastName') {
       filteredValue = filterNameInput(value);
+    } else if (name === 'mobile') {
+      filteredValue = filterMobileInput(value);
     }
     
     setFormData(prev => ({
@@ -207,7 +223,10 @@ const UserForm = ({ user, onSave, onCancel }) => {
                   name="mobile"
                   value={formData.mobile}
                   onChange={handleChange}
+                  onPaste={handlePaste}
                   isInvalid={!!errors.mobile}
+                  placeholder="Enter mobile number (numbers only, max 12 digits)"
+                  maxLength={12}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.mobile}

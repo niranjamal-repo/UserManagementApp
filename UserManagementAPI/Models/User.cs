@@ -18,8 +18,8 @@ namespace UserManagementAPI.Models
         public string LastName { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(15)]
-        [RegularExpression(@"^[\+]?[1-9][\d]{0,15}$", ErrorMessage = "Please enter a valid mobile number.")]
+        [StringLength(12, ErrorMessage = "Mobile number cannot exceed 12 characters.")]
+        [RegularExpression(@"^[0-9]{1,12}$", ErrorMessage = "Mobile number must contain only numeric values and be maximum 12 characters.")]
         public string Mobile { get; set; } = string.Empty;
 
         [Required]

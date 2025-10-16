@@ -5,7 +5,7 @@ A full-stack web application for managing users with a React frontend and .NET C
 ## 🏗️ Architecture
 
 - **Frontend**: React with Bootstrap UI
-- **Backend**: .NET Core 9.0 Web API
+- **Backend**: .NET 8.0 Web API
 - **Database**: Azure SQL Database
 - **Deployment**: Azure App Service
 - **CI/CD**: GitHub Actions
@@ -15,6 +15,7 @@ A full-stack web application for managing users with a React frontend and .NET C
 - ✅ Create, Read, Update, Delete (CRUD) operations for users
 - ✅ User fields: First Name, Last Name, Mobile, Email, Address
 - ✅ **Input validation and filtering** for names (letters, spaces, hyphens, apostrophes only)
+- ✅ **Mobile number validation** (numeric values only, maximum 12 characters)
 - ✅ Real-time form validation with user-friendly error messages
 - ✅ Responsive Bootstrap UI
 - ✅ RESTful API endpoints
@@ -26,7 +27,7 @@ A full-stack web application for managing users with a React frontend and .NET C
 
 ### Prerequisites
 
-- .NET 9.0 SDK
+- .NET 8.0 SDK
 - Node.js 18+ and npm
 - SQL Server LocalDB (for local development)
 - Azure CLI (for deployment)
@@ -119,6 +120,55 @@ Mary@Jane   ❌ Special characters removed
 John.Smith  ❌ Punctuation removed
 ```
 
+### Mobile Number Validation
+
+The application enforces strict validation for Mobile Number fields:
+
+#### ✅ **Allowed Format**
+- **Numeric values only**: 0-9 digits
+- **Maximum length**: 12 characters
+- **No special characters**: No spaces, hyphens, parentheses, or country codes
+
+#### ❌ **Blocked Characters**
+- Letters (a-z, A-Z)
+- Special symbols (@, #, $, %, etc.)
+- Punctuation marks (., !, ?, etc.)
+- Spaces and hyphens
+- Country codes (+1, +44, etc.)
+
+#### 🔧 **Validation Features**
+
+**Frontend (React):**
+- **Real-time input filtering**: Only numeric characters are allowed as you type
+- **Length limiting**: Input is automatically limited to 12 characters
+- **Paste protection**: Pasted content is filtered to remove non-numeric characters
+- **Instant validation feedback**: Error messages appear immediately
+- **User-friendly placeholders**: Clear guidance on allowed format
+
+**Backend (.NET Core):**
+- **Server-side validation**: Regular expression validation using `^[0-9]{1,12}$` pattern
+- **API-level protection**: Invalid data is rejected before reaching the database
+- **Detailed error messages**: Clear feedback about validation failures
+
+#### 📝 **Validation Examples**
+
+**Valid Mobile Numbers:**
+```
+1234567890
+9876543210
+123456789012
+5551234567
+```
+
+**Invalid Mobile Numbers (automatically filtered/blocked):**
+```
+123-456-7890    ❌ Hyphens removed
+(555) 123-4567  ❌ Parentheses and spaces removed
++1-555-123-4567 ❌ Country code and special chars removed
+555abc1234      ❌ Letters removed
+1234567890123   ❌ Truncated to 12 characters
+```
+
 ## ☁️ Azure Deployment
 
 ### Option 1: Using PowerShell Script
@@ -130,7 +180,7 @@ John.Smith  ❌ Punctuation removed
 
 2. **Run the deployment script**
    ```powershell
-   .\azure-deploy.ps1 -ResourceGroupName "user-management-rg" -AppServiceName "user-management-api" -SqlServerName "user-management-sql" -DatabaseName "UserManagementDB" -Location "Australia Southeast"
+   .\azure-deploy.ps1 -ResourceGroupName "user-management-rg" -AppServiceName "user-management-api" -SqlServerName "user-management-sql" -DatabaseName "UserManagementDB" -Location "Central US"
    ```
 
 ### Option 2: Manual Azure Setup
@@ -138,7 +188,7 @@ John.Smith  ❌ Punctuation removed
 1. **Create Azure Resources**
    - Resource Group
    - App Service Plan (Basic tier)
-   - Web App (.NET 9.0)
+   - Web App (.NET 8.0)
    - SQL Server
    - SQL Database (Basic tier)
 
@@ -250,6 +300,7 @@ npm test
 - Database migrations are automatically applied on startup
 - Email field has a unique constraint
 - **Name fields have strict validation**: Only letters, spaces, hyphens, and apostrophes allowed
+- **Mobile fields have strict validation**: Only numeric values, maximum 12 characters
 - **Real-time input filtering**: Invalid characters are automatically removed as users type
 - All timestamps are in UTC
 - Bootstrap 5 is used for responsive UI components

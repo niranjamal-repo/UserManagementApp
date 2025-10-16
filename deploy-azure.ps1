@@ -6,7 +6,7 @@ param(
     [string]$ResourceGroupName = "user-management-rg",
     
     [Parameter(Mandatory=$false)]
-    [string]$Location = "Australia Southeast",
+    [string]$Location = "Central US",
     
     [Parameter(Mandatory=$false)]
     [string]$SqlAdminPassword = "YourPassword123!"

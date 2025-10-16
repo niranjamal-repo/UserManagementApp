@@ -28,7 +28,7 @@ Connect-AzAccount
 cd UserManagementApp
 
 # Run deployment script with your parameters
-.\azure-deploy.ps1 -ResourceGroupName "user-management-rg" -AppServiceName "user-management-api" -SqlServerName "user-management-sql" -DatabaseName "UserManagementDB" -Location "Australia Southeast"
+.\azure-deploy.ps1 -ResourceGroupName "user-management-rg" -AppServiceName "user-management-api" -SqlServerName "user-management-sql" -DatabaseName "UserManagementDB" -Location "Central US"
 ```
 
 ### Step 3: Configure Connection String
@@ -48,7 +48,7 @@ After deployment, update the connection string in Azure App Service:
 
 ```bash
 # Using Azure CLI
-az group create --name user-management-rg --location "Australia Southeast"
+az group create --name user-management-rg --location "Central US"
 ```
 
 ### Step 2: Create SQL Server and Database
@@ -58,7 +58,7 @@ az group create --name user-management-rg --location "Australia Southeast"
 az sql server create \
   --name user-management-sql \
   --resource-group user-management-rg \
-  --location "Australia Southeast" \
+  --location "Central US" \
   --admin-user sqladmin \
   --admin-password YourPassword123!
 
@@ -85,7 +85,7 @@ az sql server firewall-rule create \
 az appservice plan create \
   --name user-management-plan \
   --resource-group user-management-rg \
-  --location "Australia Southeast" \
+  --location "Central US" \
   --sku B1
 
 # Create Web App

@@ -4,7 +4,7 @@
 
 # Variables - Customize these values
 RESOURCE_GROUP="user-management-rg"
-LOCATION="Australia Southeast"
+LOCATION="Central US"
 SQL_SERVER_NAME="user-management-sql-$(date +%s)"  # Makes it unique
 DATABASE_NAME="UserManagementDB"
 SQL_ADMIN_USER="sqladmin"

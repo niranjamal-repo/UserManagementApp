@@ -28,27 +28,27 @@ cd UserManagementApp
 ### Option B: Manual Commands
 ```bash
 # Create Resource Group
-az group create --name user-management-rg --location "Australia Southeast"
+az group create --name user-management-rg --location "Central US"
 
 # Create SQL Server (change password!)
 az sql server create \
-  --name user-management-sql-12345 \
+  --name user-management-sql \
   --resource-group user-management-rg \
-  --location "Australia Southeast" \
+  --location "" \
   --admin-user sqladmin \
   --admin-password YourPassword123!
 
 # Create Database
 az sql db create \
   --resource-group user-management-rg \
-  --server user-management-sql-12345 \
+  --server user-management-sql \
   --name UserManagementDB \
   --service-objective Basic
 
 # Allow Azure Services
 az sql server firewall-rule create \
   --resource-group user-management-rg \
-  --server user-management-sql-12345 \
+  --server user-management-sql \
   --name AllowAzureServices \
   --start-ip-address 0.0.0.0 \
   --end-ip-address 0.0.0.0
@@ -57,27 +57,27 @@ az sql server firewall-rule create \
 az appservice plan create \
   --name user-management-plan \
   --resource-group user-management-rg \
-  --location "Australia Southeast" \
+  --location "Central US" \
   --sku B1
 
 # Create Web App
 az webapp create \
   --resource-group user-management-rg \
   --plan user-management-plan \
-  --name user-management-api-12345 \
+  --name user-management-api \
   --runtime "DOTNET|9.0"
 
 # Set Connection String
 az webapp config connection-string set \
   --resource-group user-management-rg \
-  --name user-management-api-12345 \
+  --name user-management-api \
   --connection-string-type SQLServer \
-  --settings DefaultConnection="Server=tcp:user-management-sql-12345.database.windows.net,1433;Initial Catalog=UserManagementDB;Persist Security Info=False;User ID=sqladmin;Password=YourPassword123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  --settings DefaultConnection="Server=tcp:user-management-sql.database.windows.net,1433;Initial Catalog=UserManagementDB;Persist Security Info=False;User ID=sqladmin;Password=YourPassword123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
 # Set Environment
 az webapp config appsettings set \
   --resource-group user-management-rg \
-  --name user-management-api-12345 \
+  --name user-management-api \
   --settings ASPNETCORE_ENVIRONMENT=Production
 ```
 
@@ -93,14 +93,14 @@ Compress-Archive -Path ./publish/* -DestinationPath ./publish.zip
 # Deploy to Azure
 az webapp deployment source config-zip \
   --resource-group user-management-rg \
-  --name user-management-api-12345 \
+  --name user-management-api \
   --src ./publish.zip
 ```
 
 ## Step 5: Run Database Migrations
 ```bash
 # Connect to your App Service
-az webapp ssh --resource-group user-management-rg --name user-management-api-12345
+az webapp ssh --resource-group user-management-rg --name user-management-api
 
 # Inside the SSH session:
 cd /home/site/wwwroot
@@ -111,7 +111,7 @@ exit
 ## Step 6: Test Your API
 Your API should now be available at:
 ```
-https://user-management-api-12345.azurewebsites.net/api/users
+https://user-management-api.azurewebsites.net/api/users
 ```
 
 ## Step 7: Deploy Frontend (Optional)
@@ -141,10 +141,10 @@ swa deploy --deployment-token YOUR_DEPLOYMENT_TOKEN
 ### Check Logs:
 ```bash
 # View application logs
-az webapp log tail --resource-group user-management-rg --name user-management-api-12345
+az webapp log tail --resource-group user-management-rg --name user-management-api
 
 # View deployment logs
-az webapp deployment log list --resource-group user-management-rg --name user-management-api-12345
+az webapp deployment log list --resource-group user-management-rg --name user-management-api
 ```
 
 ## Cost Optimization
