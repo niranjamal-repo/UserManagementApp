@@ -6,7 +6,7 @@ using UserManagementAPI.Models;
 namespace UserManagementAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsersControllerEF : ControllerBase
     {
         private readonly ApplicationDbContext _context;
