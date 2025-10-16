@@ -50,14 +50,10 @@ jobs:
         name: .net-app
         path: ./publish
     
-    - name: Login to Azure  
+    - name: Login to Azure (JSON Creds)
       uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    # Optionally, if you have multiple subscriptions and need to specify one:
-    # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    # Or if you don't have a subscription associated with the service principal:
-    # allow-no-subscriptions: true
     
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
