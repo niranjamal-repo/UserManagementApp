@@ -9,6 +9,20 @@ const api = axios.create({
   },
 });
 
+builder.Services.AddCors(options =>
+  {
+      options.AddDefaultPolicy(
+          policy =>
+          {
+              policy.WithOrigins("http://user-management-frontend.azurewebsites.net", 
+                                 "https://user-management-frontend.azurewebsites.net")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+          });
+  });
+
+  app.UseCors();
+
 export const userService = {
   // Get all users
   getAllUsers: async () => {
