@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://user-management-api-1760578071.azurewebsites.net/api/users';
+const API_URL = process.env.REACT_APP_API_URL || 'https://user-management-api.azurewebsites.net';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -13,7 +13,7 @@ export const userService = {
   // Get all users
   getAllUsers: async () => {
     try {
-      const response = await api.get('/');
+      const response = await api.get('/api/users');
       return response.data;
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -24,7 +24,7 @@ export const userService = {
   // Get user by ID
   getUserById: async (id) => {
     try {
-      const response = await api.get(`/${id}`);
+      const response = await api.get(`/api/users/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -35,7 +35,7 @@ export const userService = {
   // Create new user
   createUser: async (userData) => {
     try {
-      const response = await api.post('/', userData);
+      const response = await api.post('/api/users', userData);
       return response.data;
     } catch (error) {
       console.error('Error creating user:', error);
@@ -46,7 +46,7 @@ export const userService = {
   // Update user
   updateUser: async (id, userData) => {
     try {
-      const response = await api.put(`/${id}`, userData);
+      const response = await api.put(`/api/users/${id}`, userData);
       return response.data;
     } catch (error) {
       console.error('Error updating user:', error);
@@ -57,7 +57,7 @@ export const userService = {
   // Delete user
   deleteUser: async (id) => {
     try {
-      await api.delete(`/${id}`);
+      await api.delete(`/api/users/${id}`);
       return true;
     } catch (error) {
       console.error('Error deleting user:', error);
