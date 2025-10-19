@@ -171,7 +171,30 @@ The application enforces strict validation for Mobile Number fields:
 
 ## ☁️ Azure Deployment
 
-### Option 1: Using PowerShell Script
+### Current Live Application
+
+- **Frontend**: [http://user-management-frontend.azurewebsites.net](http://user-management-frontend.azurewebsites.net)
+- **API**: [https://user-management-api.azurewebsites.net/api/users](https://user-management-api.azurewebsites.net/api/users)
+- **API Documentation**: [https://user-management-api.azurewebsites.net/swagger](https://user-management-api.azurewebsites.net/swagger)
+
+### Option 1: GitHub Actions CI/CD (Recommended)
+
+The application is configured with automatic deployment via GitHub Actions:
+
+1. **Set up GitHub Secrets**
+   - `AZURE_CREDENTIALS`: Service principal credentials for Azure authentication
+   - `AZURE_WEBAPP_PUBLISH_PROFILE`: Publish profile for API deployment
+
+2. **Automatic Deployment**
+   - Push to `main` branch triggers automatic deployment
+   - Both API and Frontend are deployed automatically
+   - Database migrations are applied automatically
+
+3. **Monitor deployment**
+   - Check GitHub Actions tab for deployment progress
+   - View logs in Azure App Service
+
+### Option 2: Using PowerShell Script
 
 1. **Install Azure PowerShell Module**
    ```powershell
@@ -183,20 +206,21 @@ The application enforces strict validation for Mobile Number fields:
    .\azure-deploy.ps1 -ResourceGroupName "user-management-rg" -AppServiceName "user-management-api" -SqlServerName "user-management-sql" -DatabaseName "UserManagementDB" -Location "Central US"
    ```
 
-### Option 2: Manual Azure Setup
+### Option 3: Manual Azure Setup
 
 1. **Create Azure Resources**
-   - Resource Group
+   - Resource Group: `user-management-rg`
    - App Service Plan (Basic tier)
-   - Web App (.NET 8.0)
-   - SQL Server
-   - SQL Database (Basic tier)
+   - API Web App: `user-management-api` (.NET 8.0)
+   - Frontend Web App: `user-management-frontend` (Node.js 20)
+   - SQL Server: `user-management-sql`
+   - SQL Database: `UserManagementDB` (Basic tier)
 
 2. **Configure Connection String**
    ```json
    {
      "ConnectionStrings": {
-       "DefaultConnection": "Server=tcp:your-server.database.windows.net,1433;Initial Catalog=UserManagementDB;Persist Security Info=False;User ID=your-username;Password=your-password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+       "DefaultConnection": "Server=tcp:user-management-sql.database.windows.net,1433;Initial Catalog=UserManagementDB;Persist Security Info=False;User ID=sqladmin;Password=UserManagement2024!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
      }
    }
    ```
@@ -206,22 +230,6 @@ The application enforces strict validation for Mobile Number fields:
    dotnet publish -c Release
    # Deploy the published files to Azure App Service
    ```
-
-### Option 3: GitHub Actions CI/CD
-
-1. **Set up GitHub Secrets**
-   - `AZURE_WEBAPP_PUBLISH_PROFILE`: Get from Azure App Service → Deployment → Deployment Center
-
-2. **Push to main branch**
-   ```bash
-   git add .
-   git commit -m "Initial deployment"
-   git push origin main
-   ```
-
-3. **Monitor deployment**
-   - Check GitHub Actions tab for deployment progress
-   - View logs in Azure App Service
 
 ## 🔧 Configuration
 
@@ -305,6 +313,26 @@ npm test
 - All timestamps are in UTC
 - Bootstrap 5 is used for responsive UI components
 - **Dual validation**: Both frontend (React) and backend (.NET) validation for data integrity
+
+## 🔄 Recent Updates & Fixes
+
+### Latest Improvements (October 2025)
+
+- ✅ **Fixed CORS Issues**: Updated CORS policy to allow both HTTP and HTTPS frontend URLs
+- ✅ **Fixed PUT Request Handling**: Resolved 400 Bad Request errors by including user ID in request body
+- ✅ **Added Express Server**: Frontend now uses Express.js server for proper static file serving on Azure
+- ✅ **Database Authentication**: Switched from Azure AD to SQL authentication for better compatibility
+- ✅ **Mobile Number Validation**: Enhanced validation with real-time filtering and length limiting
+- ✅ **GitHub Actions CI/CD**: Automated deployment pipeline for both API and Frontend
+- ✅ **Error Handling**: Improved error handling and user feedback throughout the application
+
+### Technical Architecture
+
+- **Frontend**: React with Express.js server for Azure App Service deployment
+- **Backend**: .NET 8.0 Web API with Entity Framework Core
+- **Database**: Azure SQL Database with SQL authentication
+- **Deployment**: GitHub Actions with automatic CI/CD pipeline
+- **CORS**: Configured to allow requests from both HTTP and HTTPS frontend URLs
 
 ## 🤝 Contributing
 
