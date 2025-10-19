@@ -16,6 +16,7 @@ A full-stack web application for managing users with a React frontend and .NET C
 - ✅ User fields: First Name, Last Name, Mobile, Email, Address
 - ✅ **Input validation and filtering** for names (letters, spaces, hyphens, apostrophes only)
 - ✅ **Mobile number validation** (numeric values only, maximum 12 characters)
+- ✅ **Enhanced email validation** (comprehensive format checking, length limits, domain validation)
 - ✅ Real-time form validation with user-friendly error messages
 - ✅ Responsive Bootstrap UI
 - ✅ RESTful API endpoints
@@ -141,33 +142,62 @@ The application enforces strict validation for Mobile Number fields:
 **Frontend (React):**
 - **Real-time input filtering**: Only numeric characters are allowed as you type
 - **Length limiting**: Input is automatically limited to 12 characters
-- **Paste protection**: Pasted content is filtered to remove non-numeric characters
-- **Instant validation feedback**: Error messages appear immediately
-- **User-friendly placeholders**: Clear guidance on allowed format
+- **Paste filtering**: Pasted content is automatically filtered to remove non-numeric characters
+- **Visual feedback**: Invalid input shows immediate error messages
 
 **Backend (.NET Core):**
-- **Server-side validation**: Regular expression validation using `^[0-9]{1,12}$` pattern
-- **API-level protection**: Invalid data is rejected before reaching the database
-- **Detailed error messages**: Clear feedback about validation failures
+- **Data Annotations**: `[RegularExpression(@"^[0-9]{1,12}$")]` ensures only numeric values
+- **String Length**: `[StringLength(12)]` limits maximum length
+- **Required Field**: `[Required]` ensures field is not empty
 
-#### 📝 **Validation Examples**
+### Enhanced Email Validation
 
-**Valid Mobile Numbers:**
-```
-1234567890
-9876543210
-123456789012
-5551234567
-```
+The application implements comprehensive email validation for Email fields:
 
-**Invalid Mobile Numbers (automatically filtered/blocked):**
-```
-123-456-7890    ❌ Hyphens removed
-(555) 123-4567  ❌ Parentheses and spaces removed
-+1-555-123-4567 ❌ Country code and special chars removed
-555abc1234      ❌ Letters removed
-1234567890123   ❌ Truncated to 12 characters
-```
+#### ✅ **Valid Email Formats**
+- **Standard format**: user@example.com
+- **Subdomains**: user@mail.example.com
+- **Special characters**: user.name+tag@example.co.uk
+- **Numbers**: user123@example123.com
+- **Maximum length**: 100 characters
+
+#### ❌ **Invalid Email Patterns**
+- **Missing @ symbol**: userexample.com
+- **Multiple @ symbols**: user@@example.com
+- **Consecutive dots**: user..name@example.com
+- **Invalid domain**: user@.com or user@example.
+- **Too long**: Email addresses exceeding 100 characters
+- **Empty or whitespace**: Blank email addresses
+
+#### 🔧 **Validation Features**
+
+**Frontend (React):**
+- **Real-time validation**: Immediate feedback as user types
+- **Comprehensive checks**: Format, length, consecutive dots, domain validation
+- **User-friendly messages**: Clear error messages explaining what's wrong
+- **Length limiting**: Input automatically limited to 100 characters
+
+**Backend (.NET Core):**
+- **Multiple validations**: `[Required]`, `[EmailAddress]`, `[StringLength(100)]`, `[RegularExpression]`
+- **Detailed error messages**: Specific error messages for each validation rule
+- **Server-side validation**: Ensures data integrity even if frontend validation is bypassed
+
+#### 📝 **Email Validation Examples**
+
+**✅ Valid Emails:**
+- `john.doe@example.com`
+- `user+tag@mail.example.co.uk`
+- `test123@company.org`
+- `firstname.lastname@domain-name.com`
+
+**❌ Invalid Emails:**
+- `invalid-email` (missing @ and domain)
+- `user@` (missing domain)
+- `@example.com` (missing username)
+- `user..name@example.com` (consecutive dots)
+- `user@.com` (dot immediately after @)
+
+## 🚀 Deployment
 
 ## ☁️ Azure Deployment
 

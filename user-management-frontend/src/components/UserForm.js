@@ -24,6 +24,45 @@ const UserForm = ({ user, onSave, onCancel }) => {
     }
   }, [user]);
 
+  // Comprehensive email validation function
+  const validateEmail = (email) => {
+    if (!email.trim()) {
+      return 'Email address is required';
+    }
+
+    // Check length
+    if (email.length > 100) {
+      return 'Email address cannot exceed 100 characters';
+    }
+
+    // Basic format check
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return 'Please enter a valid email address format (e.g., user@example.com)';
+    }
+
+    // Additional checks for common issues
+    if (email.includes('..')) {
+      return 'Email address cannot contain consecutive dots';
+    }
+
+    if (email.startsWith('.') || email.endsWith('.')) {
+      return 'Email address cannot start or end with a dot';
+    }
+
+    if (email.includes('@.') || email.includes('.@')) {
+      return 'Email address cannot have dots immediately before or after @ symbol';
+    }
+
+    // Check for valid domain
+    const domain = email.split('@')[1];
+    if (domain && domain.length < 3) {
+      return 'Email domain must be at least 3 characters long';
+    }
+
+    return null; // No error
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -41,11 +80,10 @@ const UserForm = ({ user, onSave, onCancel }) => {
       newErrors.lastName = 'Last name can only contain letters, spaces, hyphens, and apostrophes';
     }
 
-    // Email validation
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+    // Enhanced Email validation
+    const emailError = validateEmail(formData.email);
+    if (emailError) {
+      newErrors.email = emailError;
     }
 
     // Mobile validation
@@ -127,6 +165,13 @@ const UserForm = ({ user, onSave, onCancel }) => {
           [name]: ''
         }));
       }
+    } else if (name === 'email') {
+      // Real-time email validation
+      const emailError = validateEmail(filteredValue);
+      setErrors(prev => ({
+        ...prev,
+        [name]: emailError || ''
+      }));
     } else {
       // Clear error for other fields when user starts typing
       if (errors[name]) {
@@ -209,6 +254,8 @@ const UserForm = ({ user, onSave, onCancel }) => {
                   value={formData.email}
                   onChange={handleChange}
                   isInvalid={!!errors.email}
+                  placeholder="Enter email address (e.g., user@example.com)"
+                  maxLength={100}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.email}

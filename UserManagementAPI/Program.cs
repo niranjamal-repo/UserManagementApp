@@ -14,9 +14,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.WithOrigins("http://user-management-frontend.azurewebsites.net", 
+                               "https://user-management-frontend.azurewebsites.net")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
     });
 });
 

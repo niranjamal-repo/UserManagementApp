@@ -22,9 +22,11 @@ namespace UserManagementAPI.Models
         [RegularExpression(@"^[0-9]{1,12}$", ErrorMessage = "Mobile number must contain only numeric values and be maximum 12 characters.")]
         public string Mobile { get; set; } = string.Empty;
 
-        [Required]
-        [EmailAddress]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Email address is required.")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+        [StringLength(100, ErrorMessage = "Email address cannot exceed 100 characters.")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", 
+            ErrorMessage = "Please enter a valid email address format (e.g., user@example.com).")]
         public string Email { get; set; } = string.Empty;
 
         [Required]
