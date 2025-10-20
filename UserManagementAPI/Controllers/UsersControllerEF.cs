@@ -98,6 +98,9 @@ namespace UserManagementAPI.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                
+                // Return the updated user object
+                return Ok(existingUser);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -110,8 +113,6 @@ namespace UserManagementAPI.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // DELETE: api/users/5

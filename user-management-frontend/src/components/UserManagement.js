@@ -56,9 +56,9 @@ const UserManagement = () => {
     try {
       if (selectedUser) {
         // Update existing user
-        await userService.updateUser(selectedUser.id, userData);
+        const updatedUser = await userService.updateUser(selectedUser.id, userData);
         setUsers(users.map(user => 
-          user.id === selectedUser.id ? { ...userData, id: selectedUser.id } : user
+          user.id === selectedUser.id ? updatedUser : user
         ));
         setSuccess('User updated successfully!');
       } else {

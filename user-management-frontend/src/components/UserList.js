@@ -1,6 +1,19 @@
 import React from 'react';
 import { Table, Button, Spinner, Alert } from 'react-bootstrap';
 
+// Helper function to format dates safely
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Invalid Date';
+    return date.toLocaleDateString();
+  } catch (error) {
+    return 'Invalid Date';
+  }
+};
+
 const UserList = ({ users, loading, onEdit, onDelete }) => {
   if (loading) {
     return (
@@ -44,7 +57,7 @@ const UserList = ({ users, loading, onEdit, onDelete }) => {
             <td>{user.email}</td>
             <td>{user.mobile}</td>
             <td>{user.address}</td>
-            <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+            <td>{formatDate(user.createdAt)}</td>
             <td>
               <Button
                 variant="outline-primary"
